@@ -1,3 +1,5 @@
+<img width="850" height="300" alt="banner_arx" src="https://github.com/user-attachments/assets/8242da41-1420-4cd9-aebe-776d7d3be3c9" />
+
 # arx
 
 **arx** is a modern Node.js backend framework designed for developers who want to handle multiple data formats effortlessly. It combines the simplicity of Express-style routing with automatic parsing for JSON, CSV, XML, YAML, form-data, and binary data.
