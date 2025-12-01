@@ -1,75 +1,50 @@
-<img width="850" height="300" alt="banner_holoway" src="https://github.com/user-attachments/assets/8242da41-1420-4cd9-aebe-776d7d3be3c9" />
+<img# CMX
 
-# holoway
+![CMX Banner](https://via.placeholder.com/1200x300?text=CMX+Framework)
 
-**holoway** is a modern Node.js backend framework designed for developers who want to handle multiple data formats effortlessly. It combines the simplicity of Express-style routing with automatic parsing for JSON, CSV, XML, YAML, form-data, and binary data.
+> A modern, lightweight, and multi-format backend framework for Node.js.
 
-holoway is ideal for building APIs, file processing services, IoT backends, and any server that needs to work with multiple data formats without extra boilerplate.
+[![npm version](https://img.shields.io/npm/v/cmx.svg)](https://www.npmjs.com/package/cmx)
+[![License](https://img.shields.io/npm/l/cmx.svg)](https://github.com/XplnHUB/cmx/blob/main/LICENSE)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/XplnHUB/cmx/test.yml)](https://github.com/XplnHUB/cmx/actions)
 
----
+## Overview
+
+**CMX** is a modern Node.js backend framework designed for developers who want to handle multiple data formats effortlessly. It combines the simplicity of Express-style routing with automatic parsing for JSON, CSV, XML, YAML, form-data, and binary data.
+
+Whether you're building a REST API, a data processing service, or an IoT backend, CMX has you covered.
 
 ## Features
 
-* **Express-style API** with `app.get()`, `app.post()`, `app.use()` syntax.
-* **Automatic body parsing** for multiple formats:
-  * JSON (`application/json`)
-  * CSV (`text/csv`)
-  * XML (`application/xml`)
-  * YAML (`application/x-yaml`)
-  * Form-data (`multipart/form-data`)
-  * Binary (`application/octet-stream`)
-* **Stream handling** for large file uploads and streaming data.
-* **Middleware system** with global, path-specific, and route-level support.
-* **Async middleware** support with full promise-based execution.
-* **Error handling middleware** for centralized error management.
-* **Route parameters** and wildcard routes (`/users/:id`, `/files/*`).
-* **Query string parsing** with automatic parameter extraction.
-* **Enhanced response helpers**:
-  * `res.status(code)` - Set HTTP status code
-  * `res.set(header, value)` - Set response headers
-  * `res.json()`, `res.csv()`, `res.xml()`, `res.yaml()` - Format-specific responses
-  * `res.file()`, `res.download()` - File handling
-  * `res.error()` - Standardized error responses
-  * `res.stream()` - Stream piping
-* **Graceful shutdown** with cleanup hooks.
-* **CORS support** with configurable options.
-* **TypeScript definitions** for full type safety.
-* **Comprehensive error handling** with status codes and detailed messages.
-* **File upload limits** with configurable size and memory constraints.
-* **XXE protection** for XML parsing (enabled by default).
-
----
+- 🚀 **Express-style Routing**: Familiar API for defining routes and middleware.
+- 📦 **Multi-format Parsing**: Automatic parsing for JSON, CSV, XML, YAML, Form-Data, and Binary.
+- 🛠️ **Middleware System**: Robust middleware support for logging, authentication, and more.
+- ⚡ **Lightweight**: Zero external dependencies for core routing and middleware.
+- 🔒 **Security**: Built-in security features like XXE protection and file upload limits.
+- 📝 **Enhanced Responses**: Helper methods for sending responses in various formats (`res.json`, `res.csv`, `res.xml`, etc.).
+- 📄 **Auto-Documentation**: Automatically generate API documentation from your routes.
 
 ## Installation
 
 ```bash
-npm install holoway
-````
-
----
+npm install cmx
+```
 
 ## Quick Start
 
-```js
-import holoway from "holoway";
+Create a simple server in `index.js`:
 
-const app = holoway();
+```javascript
+import App from 'cmx';
+
+const app = new App();
 
 // Middleware
 app.use((req, res, next) => {
-  console.log(`[${req.method}] ${req.url} | BodyType: ${req.bodyType}`);
+  console.log(`${req.method} ${req.url}`);
   next();
 });
 
-// JSON route
-app.post("/json", (req, res) => {
-  res.json({ received: req.body, type: req.bodyType });
-});
-
-// CSV route
-app.post("/csv", (req, res) => {
-  res.json({ received: req.body, type: req.bodyType });
-});
 
 // XML route
 app.post("/xml", (req, res) => {
@@ -82,7 +57,7 @@ app.post("/binary", (req, res) => {
 });
 
 // Start server
-app.listen(3000, () => console.log("holoway running on http://localhost:3000"));
+app.listen(3000, () => console.log("cmx running on http://localhost:3000"));
 ```
 
 ---

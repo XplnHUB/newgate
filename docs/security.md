@@ -1,6 +1,6 @@
-# Holoway Security Practices
+# CMX Security Practices
 
-This guide covers security best practices when using the Holoway framework.
+This guide covers security best practices when using the CMX framework.
 
 ## Table of Contents
 
@@ -22,7 +22,7 @@ This guide covers security best practices when using the Holoway framework.
 Always validate and sanitize user input before processing:
 
 ```javascript
-import App from 'holoway';
+import App from 'cmx';
 
 const app = new App();
 
@@ -102,7 +102,7 @@ app.post('/import', (req, res) => {
 Always set appropriate file upload limits:
 
 ```javascript
-import App from 'holoway';
+import App from 'cmx';
 
 const app = new App();
 
@@ -226,7 +226,7 @@ app.post('/upload', (req, res) => {
 
 ### XXE Protection (Enabled by Default)
 
-Holoway enables XXE protection by default:
+CMX enables XXE protection by default:
 
 ```javascript
 // Safe by default - external entities disabled
@@ -238,15 +238,135 @@ app.post('/data', (req, res) => {
 });
 ```
 
-### Disable Safe Mode Only When Necessary
+# CMX Security Guide
 
-Only disable safe mode if you absolutely need it:
+Security is a top priority in CMX. This document outlines the built-in security features and best practices for securing your CMX applications.
+
+## Built-in Security Features
+
+### 1. XXE Protection
+
+XML External Entity (XXE) attacks are a common vulnerability in XML parsers. CMX's XML parser (`xml2js`) is configured with `safeMode: true` by default, which disables external entity replacement.
 
 ```javascript
-import parseXML from 'holoway/src/parsers/xml.js';
+// src/parsers/xml.js
+const parser = new xml2js.Parser({
+  explicitArray: false,
+  trim: true,
+  // Security options
+  xmldec: { version: '1.0', encoding: 'UTF-8' },
+  doctype: null // Disable DOCTYPE
+});
+```
 
-// NOT RECOMMENDED - Only use if you understand the risks
-const xml = await parseXML(buffer, { safeMode: false });
+### 2. File Upload Limits
+
+To prevent Denial of Service (DoS) attacks via large file uploads, CMX enforces limits on file size and count.
+
+```javascript
+// Default limits
+const options = {
+  fileSizeLimit: 10 * 1024 * 1024,  // 10MB
+  memoryLimit: 50 * 1024 * 1024,    // 50MB
+  fileCountLimit: 10
+};
+```
+
+### 3. Body Size Limits
+
+JSON and other text-based parsers have default size limits to prevent memory exhaustion.
+
+## Best Practices
+
+### 1. Input Validation
+
+Always validate user input. While CMX parses data, it does not validate the schema or content.
+
+**Recommendation**: Use a validation library like `zod` or `joi`.
+
+```javascript
+import { z } from 'zod';
+
+const userSchema = z.object({
+  username: z.string().min(3),
+  email: z.string().email()
+});
+
+app.post('/users', (req, res) => {
+  const result = userSchema.safeParse(req.body);
+  if (!result.success) {
+    return res.status(400).json({ error: result.error });
+  }
+  // Proceed
+});
+```
+
+### 2. CORS Configuration
+
+Configure Cross-Origin Resource Sharing (CORS) to allow only trusted domains.
+
+```javascript
+app.cors({
+  origin: 'https://trusted-domain.com',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+});
+```
+
+### 3. Helmet Integration
+
+Use `helmet` to set secure HTTP headers. Since CMX uses standard `req` and `res` objects, `helmet` can be used as middleware.
+
+```javascript
+import helmet from 'helmet';
+
+app.use((req, res, next) => {
+  helmet()(req, res, next);
+});
+```
+
+### 4. Rate Limiting
+
+Implement rate limiting to prevent brute-force attacks and API abuse.
+
+```javascript
+import rateLimit from 'express-rate-limit'; // Compatible with CMX
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
+
+app.use(limiter);
+```
+
+### 5. Error Handling
+
+Do not expose stack traces or sensitive information in production error responses.
+
+```javascript
+app.useError((err, req, res, next) => {
+  console.error(err); // Log internally
+  res.status(500).json({
+    error: 'Internal Server Error',
+    code: 500
+    // Do not send err.stack
+  });
+});
+```
+
+### 6. Dependency Management
+
+Regularly update dependencies to patch known vulnerabilities.
+
+```bash
+npm audit
+npm update
+```
+
+## Reporting Vulnerabilities
+
+If you discover a security vulnerability in CMX, please do **not** open a public issue. Instead, email us at security@cmx.dev. We will investigate and address the issue promptly.
 ```
 
 ### Validate XML Structure
@@ -290,7 +410,7 @@ app.post('/xml-data', (req, res) => {
 Always restrict CORS origins in production:
 
 ```javascript
-import App from 'holoway';
+import App from 'cmx';
 
 const app = new App();
 

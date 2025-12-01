@@ -1,6 +1,6 @@
-# Holoway Architecture Overview
+# CMX Architecture Overview
 
-This document describes the internal architecture and design patterns of the Holoway framework.
+This document describes the internal architecture and design patterns of the CMX framework.
 
 ## Table of Contents
 
@@ -14,7 +14,7 @@ This document describes the internal architecture and design patterns of the Hol
 
 ## Overview
 
-Holoway is a lightweight, multi-format backend framework built on Node.js's native HTTP module. It provides:
+CMX is a lightweight, multi-format backend framework built on Node.js's native HTTP module. It provides:
 
 - **Express-like routing** with parameter and wildcard support
 - **Automatic content-type detection** and parsing
@@ -43,103 +43,92 @@ The main application class that orchestrates the framework.
 **Key Methods:**
 - `get/post/put/delete/patch(path, ...handlers)` - Register routes
 - `use(middleware)` - Register middleware
-- `useError(handler)` - Register error handlers
-- `cors(options)` - Configure CORS
-- `onShutdown(hook)` - Register cleanup hooks
-- `listen(port, callback)` - Start server
-- `shutdown()` - Graceful shutdown
+### 1. App Class (`src/core/app.js`)
+
+The `App` class is the main entry point. It orchestrates:
+- Server creation (`http.createServer`)
+- Route registration
+- Middleware execution
+- Request/Response enhancement
+- Error handling
 
 ### 2. Router (`src/core/router.js`)
 
-Handles route matching and parameter extraction.
+The `Router` handles URL matching and handler dispatching.
+- Stores routes in a structured format.
+- Supports parameterized routes (`/users/:id`).
+- Supports wildcard routes (`/files/*`).
+- Handles HTTP methods (GET, POST, PUT, DELETE, etc.).
 
-**Responsibilities:**
-- Route registration and storage
-- Path-to-regex conversion
-- Parameter extraction from URLs
-- Query string parsing
-- CORS header injection
-- Handler execution
+### 3. Middleware Engine
 
-**Key Methods:**
-- `addRoute(method, path, ...handlers)` - Register route
-- `match(method, url)` - Find matching route
-- `_pathToRegex(path)` - Convert path to regex
-- `_extractParams(paramNames, match)` - Extract route params
-- `_parseQuery(queryString)` - Parse query params
-- `_setCorsHeaders(res)` - Apply CORS headers
+CMX uses a middleware stack similar to Connect/Express.
+- **Global Middleware**: Runs for every request.
+- **Path-Specific Middleware**: Runs for requests matching a path prefix.
+- **Route-Specific Middleware**: Runs for specific routes.
+- **Error Middleware**: Handles errors propagated via `next(err)`.
 
-**Route Pattern Support:**
-- Static: `/users`
-- Parameters: `/users/:id`
-- Wildcards: `/files/*`
-- Multiple params: `/users/:userId/posts/:postId`
+### 4. Parsers (`src/parsers/`)
 
-### 3. Middleware Engine (`src/core/middleware.js`)
+The parsing system is modular. It inspects the `Content-Type` header and delegates to the appropriate parser.
+- `json.js`: Handles `application/json`.
+- `csv.js`: Handles `text/csv`.
+- `xml.js`: Handles `application/xml`.
+- `yaml.js`: Handles `application/x-yaml`.
+- `formdata.js`: Handles `multipart/form-data`.
+- `binary.js`: Handles `application/octet-stream`.
 
-Executes middleware chain with async support.
+### 5. Response Enhancer (`src/response/enhance.js`)
 
-**Responsibilities:**
-- Sequential middleware execution
-- Async/await support
-- Error handling and propagation
-- Error handler middleware detection
+The `enhanceResponse` function adds helper methods to the native `ServerResponse` object.
+- `res.json(data)`
+- `res.csv(data)`
+- `res.xml(data)`
+- `res.status(code)`
+- `res.send(data)`
 
-**Key Features:**
-- Automatic async middleware detection
-- Error middleware (4 parameters) handling
-- Promise-based execution
+## Request Flow
 
-### 4. Server (`src/core/server.js`)
+1. **Incoming Request**: HTTP server receives a request.
+2. **Enhancement**: `req` and `res` objects are enhanced with CMX properties and methods.
+3. **Body Parsing**: The body is parsed based on `Content-Type`.
+4. **Middleware Execution**: Global and path-specific middleware are executed in order.
+5. **Route Matching**: The router finds a matching route handler.
+6. **Handler Execution**: The route handler is executed.
+7. **Response**: The handler sends a response using one of the helper methods.
 
-HTTP server creation and request handling.
+## Module Structure
 
-**Responsibilities:**
-- HTTP server creation
-- Request parsing
-- Response enhancement
-- Middleware execution
-- Route matching
-- Global error handling
+```
+cmx/
+├── bin/
+│   └── cmx.js          # CLI entry point
+├── src/
+│   ├── core/
+│   │   ├── app.js      # Main App class
+│   │   ├── router.js   # Routing logic
+│   │   └── server.js   # HTTP server wrapper
+│   ├── middleware/
+│   │   └── index.js    # Built-in middleware
+│   ├── parsers/
+│   │   ├── index.js    # Parser dispatcher
+│   │   ├── json.js
+│   │   ├── csv.js
+│   │   └── ...
+│   ├── response/
+│   │   └── enhance.js  # Response helpers
+│   └── utils/
+│       └── logger.js   # Logger utility
+├── tests/              # Unit and integration tests
+├── docs/               # Documentation
+└── package.json
+```
 
-**Request Processing:**
-1. Parse request body based on content-type
-2. Enhance response object
-3. Execute global middleware
-4. Match route
-5. Execute route handlers
-6. Handle errors
+## Extensibility
 
-### 5. Parsers (`src/parsers/`)
-
-Content-type specific parsing modules.
-
-**Supported Formats:**
-- **JSON** (`json.js`) - Application/json
-- **CSV** (`csv.js`) - Text/csv, Application/csv
-- **XML** (`xml.js`) - Application/xml, Text/xml
-- **YAML** (`yaml.js`) - Application/x-yaml, Text/yaml
-- **Form-Data** (`formdata.js`) - Multipart/form-data
-- **Binary** (`binary.js`) - Other formats
-
-**Parser Features:**
-- Error handling with status codes
-- Advanced options support
-- Schema validation (CSV)
-- Safe mode (XML)
-- Multi-document support (YAML)
-- File size limits (Form-Data)
-
-### 6. Response Enhancement (`src/response/enhance.js`)
-
-Adds helper methods to response object.
-
-**Methods:**
-- `status(code)` - Set status code
-- `set(header, value)` - Set header
-- `json(data)` - Send JSON
-- `send(data)` - Send text/buffer
-- `csv(data)` - Send CSV
+CMX is designed to be extensible.
+- **Custom Parsers**: Can be added by modifying the parser dispatcher (future feature: plugin system).
+- **Custom Middleware**: Standard middleware signature `(req, res, next)` allows easy integration of custom logic.
 - `xml(data)` - Send XML
 - `yaml(data)` - Send YAML
 - `file(buffer, mimetype)` - Send binary
@@ -214,7 +203,7 @@ Helper functions for common tasks.
 ## Module Structure
 
 ```
-holoway/
+cmx/
 ├── src/
 │   ├── core/
 │   │   ├── app.js           # Main App class

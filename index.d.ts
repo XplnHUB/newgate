@@ -1,46 +1,34 @@
 import { IncomingMessage, ServerResponse } from 'http';
 
-export interface HolowayRequest extends IncomingMessage {
-  body?: any;
-  bodyType?: 'json' | 'csv' | 'xml' | 'yaml' | 'formdata' | 'binary' | null;
-  params?: Record<string, string>;
-  query?: Record<string, string | boolean>;
+export interface CMXRequest extends IncomingMessage {
+  body: any;
+  bodyType: 'json' | 'csv' | 'xml' | 'yaml' | 'formdata' | 'binary' | null;
+  params: Record<string, string>;
+  query: Record<string, string>;
+  id?: string;
+  [key: string]: any;
 }
 
-export interface HolowayResponse extends ServerResponse {
-  status(code: number): HolowayResponse;
-  set(header: string, value: string): HolowayResponse;
+export interface CMXResponse extends ServerResponse {
+  status(code: number): CMXResponse;
+  set(header: string, value: string | number | string[]): CMXResponse;
   json(data: any): void;
-  send(data: string | Buffer): void;
-  csv(data: string): void;
-  xml(data: string): void;
-  yaml(data: string): void;
+  send(data: any): void;
+  csv(data: any[] | string, options?: any): void;
+  xml(data: any, options?: any): void;
+  yaml(data: any, options?: any): void;
   file(buffer: Buffer, mimetype?: string): void;
   error(options: { message: string; code?: number; details?: any }): void;
-  stream(readableStream: NodeJS.ReadableStream): void;
+  stream(stream: any): void;
   download(filePath: string, filename?: string): void;
 }
 
-/**
- * Route handler function
- */
-export type RouteHandler = (req: HolowayRequest, res: HolowayResponse, next?: (err?: Error) => void) => void | Promise<void>;
+export type RouteHandler = (req: CMXRequest, res: CMXResponse, next: (err?: any) => void) => void | Promise<void>;
+export type Middleware = (req: CMXRequest, res: CMXResponse, next: (err?: any) => void) => void | Promise<void>;
+export type ErrorHandler = (err: any, req: CMXRequest, res: CMXResponse, next: (err?: any) => void) => void | Promise<void>;
 
-/**
- * Middleware function
- */
-export type Middleware = (req: HolowayRequest, res: HolowayResponse, next: (err?: Error) => void) => void | Promise<void>;
-
-/**
- * Error handler middleware
- */
-export type ErrorHandler = (err: Error, req: HolowayRequest, res: HolowayResponse, next: (err?: Error) => void) => void | Promise<void>;
-
-/**
- * CORS options
- */
 export interface CORSOptions {
-  origin?: string;
+  origin?: string | string[] | boolean | ((origin: string) => boolean);
   methods?: string[];
   allowedHeaders?: string[];
   exposedHeaders?: string[];
@@ -48,65 +36,66 @@ export interface CORSOptions {
   maxAge?: number;
 }
 
-/**
- * Main App class
- */
+export interface ParserOptions {
+  json?: {
+    strict?: boolean;
+    limit?: string | number;
+  };
+  csv?: {
+    headers?: boolean;
+    delimiter?: string;
+    skipEmptyLines?: boolean;
+    schema?: Record<string, (val: any) => boolean>;
+  };
+  xml?: {
+    safeMode?: boolean;
+    strict?: boolean;
+  };
+  yaml?: {
+    multiDoc?: boolean;
+  };
+  formdata?: {
+    fileSizeLimit?: number;
+    memoryLimit?: number;
+    fileCountLimit?: number;
+  };
+}
+
 export default class App {
-  constructor();
+  constructor(options?: {
+    parsers?: ParserOptions;
+  });
 
-  /**
-   * Register GET route
-   */
-  get(path: string, ...handlers: (RouteHandler | Middleware)[]): void;
+  router: {
+    routes: Array<{
+      method: string;
+      path: string;
+      regex: RegExp;
+      paramNames: string[];
+      handlers: RouteHandler[];
+    }>;
+  };
 
-  /**
-   * Register POST route
-   */
-  post(path: string, ...handlers: (RouteHandler | Middleware)[]): void;
+  use(middleware: Middleware): void;
+  use(path: string, middleware: Middleware): void;
 
-  /**
-   * Register PUT route
-   */
-  put(path: string, ...handlers: (RouteHandler | Middleware)[]): void;
-
-  /**
-   * Register DELETE route
-   */
-  delete(path: string, ...handlers: (RouteHandler | Middleware)[]): void;
-
-  /**
-   * Register PATCH route
-   */
-  patch(path: string, ...handlers: (RouteHandler | Middleware)[]): void;
-
-  /**
-   * Register global middleware
-   */
-  use(middleware: Middleware | string): any;
-
-  /**
-   * Register error handling middleware
-   */
   useError(handler: ErrorHandler): void;
 
-  /**
-   * Configure CORS
-   */
-  cors(options: CORSOptions): App;
+  get(path: string, ...handlers: RouteHandler[]): void;
+  post(path: string, ...handlers: RouteHandler[]): void;
+  put(path: string, ...handlers: RouteHandler[]): void;
+  delete(path: string, ...handlers: RouteHandler[]): void;
+  patch(path: string, ...handlers: RouteHandler[]): void;
+  options(path: string, ...handlers: RouteHandler[]): void;
+  head(path: string, ...handlers: RouteHandler[]): void;
 
-  /**
-   * Register shutdown hook
-   */
-  onShutdown(hook: () => void | Promise<void>): App;
+  cors(options?: CORSOptions): void;
 
-  /**
-   * Gracefully shutdown the server
-   */
+  onShutdown(hook: () => Promise<void> | void): void;
+
+  listen(port: number, callback?: () => void): void;
   shutdown(): Promise<void>;
 
-  /**
-   * Start listening on port
-   */
   listen(port: number, callback?: () => void): any;
 }
 

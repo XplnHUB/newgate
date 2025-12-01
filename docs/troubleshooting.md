@@ -1,137 +1,81 @@
-# Holoway Troubleshooting Guide
+# CMX Troubleshooting Guide
 
-Common issues and solutions when using the Holoway framework.
+Common issues and solutions when working with CMX.
 
 ## Table of Contents
 
+- [Installation Issues](#installation-issues)
+- [Runtime Errors](#runtime-errors)
 - [Parser Issues](#parser-issues)
-- [Routing Issues](#routing-issues)
 - [Middleware Issues](#middleware-issues)
-- [Response Issues](#response-issues)
-- [Performance Issues](#performance-issues)
-- [Error Messages](#error-messages)
+- [Performance Tuning](#performance-tuning)
+
+---
+
+## Installation Issues
+
+### `Error: Cannot find module 'cmx'`
+
+**Cause**: The package is not installed or `node_modules` is corrupted.
+
+**Solution**:
+1. Run `npm install cmx`
+2. Verify it exists in `package.json` dependencies.
+3. Delete `node_modules` and run `npm install` again.
+
+### `npm install` fails with EACCES
+
+**Cause**: Permission issues on your system.
+
+**Solution**:
+- Use `sudo` (not recommended).
+- Fix npm permissions: [npm docs](https://docs.npmjs.com/resolving-eacces-permissions-errors-when-installing-packages-globally)
+- Use a version manager like `nvm`.
+
+---
+
+## Runtime Errors
+
+### `Error: listen EADDRINUSE: address already in use :::3000`
+
+**Cause**: Another process is already using port 3000.
+
+**Solution**:
+1. Find the process: `lsof -i :3000`
+2. Kill it: `kill -9 <PID>`
+3. Or change the port in your app: `app.listen(3001)`
+
+### `TypeError: app.use is not a function`
+
+**Cause**: Incorrect import or instantiation.
+
+**Solution**:
+Ensure you are importing the default export and instantiating it.
+
+```javascript
+import App from 'cmx';
+const app = new App(); // Correct
+```
+
+### `Error: Route handler must be a function`
+
+**Cause**: Passing a non-function to a route method.
+
+**Solution**:
+Check your route definitions.
+
+```javascript
+// Incorrect
+app.get('/', 'hello');
+
+// Correct
+app.get('/', (req, res) => res.send('hello'));
+```
 
 ---
 
 ## Parser Issues
 
-### Invalid JSON Error
-
-**Problem**: `Invalid JSON: Unexpected token`
-
-**Causes**:
-- Malformed JSON in request body
-- Missing or incorrect Content-Type header
-- Empty request body
-
-**Solution**:
-
-```javascript
-// Verify Content-Type header
-app.post('/data', (req, res) => {
-  if (req.headers['content-type'] !== 'application/json') {
-    return res.status(400).error({
-      message: 'Content-Type must be application/json',
-      code: 400
-    });
-  }
-
-  // Verify body is not empty
-  if (!req.body) {
-    return res.status(400).error({
-      message: 'Request body is empty',
-      code: 400
-    });
-  }
-
-  res.json(req.body);
-});
-```
-
-### Invalid CSV Error
-
-**Problem**: `Invalid CSV: Error parsing CSV`
-
-**Causes**:
-- Mismatched delimiters
-- Unclosed quoted fields
-- Invalid schema validation
-
-**Solution**:
-
-```javascript
-// Specify correct delimiter
-app.post('/csv', (req, res) => {
-  try {
-    // Try with semicolon delimiter
-    const data = parseCSV(req.body, { delimiter: ';' });
-    res.json({ records: data.length });
-  } catch (err) {
-    res.status(400).error({
-      message: 'CSV parsing failed',
-      code: 400,
-      details: { error: err.message }
-    });
-  }
-});
-```
-
-### Invalid XML Error
-
-**Problem**: `Invalid XML: Unexpected end of input`
-
-**Causes**:
-- Unclosed XML tags
-- Invalid XML declaration
-- Malformed attributes
-
-**Solution**:
-
-```javascript
-// Validate XML structure
-app.post('/xml', (req, res) => {
-  try {
-    // Check if XML is well-formed
-    if (!req.body.trim().startsWith('<?xml')) {
-      // Add XML declaration if missing
-      const xmlString = `<?xml version="1.0"?>${req.body}`;
-      // Parse with corrected XML
-    }
-    res.json({ success: true });
-  } catch (err) {
-    res.status(400).error({
-      message: 'XML parsing failed',
-      code: 400,
-      details: { error: err.message }
-    });
-  }
-});
-```
-
-### Invalid YAML Error
-
-**Problem**: `Invalid YAML: Implicit keys need to be on a single line`
-
-**Causes**:
-- Incorrect indentation
-- Invalid key-value syntax
-- Unclosed quotes
-
-**Solution**:
-
-```javascript
-// Validate YAML syntax
-app.post('/yaml', (req, res) => {
-  try {
-    // Check indentation (should be 2 or 4 spaces)
-    const lines = req.body.split('\n');
-    for (const line of lines) {
-      const indent = line.match(/^(\s*)/)[1].length;
-      if (indent % 2 !== 0) {
-        throw new Error('Invalid indentation');
-      }
-    }
-    res.json({ success: true });
   } catch (err) {
     res.status(400).error({
       message: 'YAML parsing failed',
@@ -154,7 +98,7 @@ app.post('/yaml', (req, res) => {
 
 ```javascript
 // Increase limits if needed
-const parseFormData = require('holoway/src/parsers/formdata.js');
+const parseFormData = require('cmx/src/parsers/formdata.js');
 
 app.post('/upload', (req, res) => {
   try {
@@ -576,7 +520,7 @@ function cacheSet(key, value) {
 
 **Solution**:
 ```bash
-npm install holoway
+npm install cmx
 ```
 
 ### "Port already in use"
@@ -641,7 +585,7 @@ If you encounter issues not covered here:
 1. Check the [API Documentation](./api.md)
 2. Review [Architecture Overview](./architecture.md)
 3. Check [Security Practices](./security.md)
-4. Open an issue on [GitHub](https://github.com/XplnHUB/holoway/issues)
+4. Open an issue on [GitHub](https://github.com/XplnHUB/cmx/issues)
 5. Check existing issues for similar problems
 
 ---

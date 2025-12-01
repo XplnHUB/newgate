@@ -1,5 +1,5 @@
 /**
- * Simple logger utility for Holoway
+ * Simple logger utility for CMX
  * Supports different log levels and formatted output
  */
 
@@ -23,7 +23,7 @@ class Logger {
   constructor(options = {}) {
     this.level = LOG_LEVELS[options.level?.toUpperCase()] ?? LOG_LEVELS.INFO;
     this.useColors = options.useColors !== false;
-    this.prefix = options.prefix || 'Holoway';
+    this.prefix = prefix || 'CMX';
   }
 
   _formatMessage(level, message, data) {

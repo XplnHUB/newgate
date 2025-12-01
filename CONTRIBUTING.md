@@ -1,317 +1,163 @@
-# Contributing to Holoway
+# Contributing to CMX
 
-Thank you for your interest in contributing to Holoway! This document provides guidelines and instructions for contributing.
+First off, thanks for taking the time to contribute! ❤️
 
-## Code of Conduct
+All types of contributions are encouraged and valued. See the [Table of Contents](#table-of-contents) for different ways to help and details about how this project handles them. Please make sure to read the relevant section before making your contribution. It will make it a lot easier for us maintainers and smooth out the experience for all involved. The community looks forward to your contributions.
 
-Be respectful, inclusive, and professional. We're committed to providing a welcoming environment for all contributors.
+## Table of Contents
 
-## Getting Started
+- [I Have a Question](#i-have-a-question)
+- [I Want To Contribute](#i-want-to-contribute)
+  - [Reporting Bugs](#reporting-bugs)
+  - [Suggesting Enhancements](#suggesting-enhancements)
+  - [Your First Code Contribution](#your-first-code-contribution)
+  - [Improving The Documentation](#improving-the-documentation)
+- [Styleguides](#styleguides)
+  - [Commit Messages](#commit-messages)
+- [Join The Project Team](#join-the-project-team)
 
-### Prerequisites
-- Node.js 18.x or higher
-- npm 9.x or higher
-- Git
+## I Have a Question
 
-### Setup Development Environment
+> If you want to ask a question, we assume that you have read the available [Documentation](https://github.com/XplnHUB/cmx#readme).
+
+Before you ask a question, it is best to search for existing [Issues](https://github.com/XplnHUB/cmx/issues) that might help you. In case you have found a suitable issue and still need clarification, you can write your question in this issue. It is also advisable to search the internet for answers first.
+
+If you then still feel the need to ask a question and need clarification, we recommend the following:
+
+- Open an [Issue](https://github.com/XplnHUB/cmx/issues/new).
+- Provide as much context as you can about what you're running into.
+- Provide project and platform versions (nodejs, npm, etc), depending on what seems relevant.
+
+We will then take care of the issue as soon as possible.
+
+## I Want To Contribute
+
+### Reporting Bugs
+
+#### Before Submitting a Bug Report
+
+A good bug report shouldn't leave others needing to chase you up for more information. Therefore, we ask you to investigate carefully, collect information and describe the issue in detail in your report. Please complete the following steps in advance to help us fix any potential bug as fast as possible.
+
+- Make sure that you are using the latest version.
+- Determine if your bug is really a bug and not an error on your side e.g. using incompatible environment components/versions (Make sure that you have read the [documentation](https://github.com/XplnHUB/cmx#readme). If you are looking for support, you might want to check [this section](#i-have-a-question)).
+- To see if other users have experienced (and potentially already solved) the same issue you are having, check if there is not already a bug report existing for your bug or error in the [bug tracker](https://github.com/XplnHUB/cmx/issues).
+- Also make sure to search the internet (including Stack Overflow) to see if users outside of the GitHub community have discussed the issue.
+- Collect information about the bug:
+  - Stack trace (Traceback)
+  - OS, Platform and Version (Windows, Linux, macOS, x86, ARM)
+  - Version of the interpreter, compiler, SDK, runtime environment, package manager, depending on what seems relevant.
+  - Possibly your input and the output
+  - Can you reliably reproduce the issue? And can you also reproduce it with older versions?
+
+#### How Do I Submit a Good Bug Report?
+
+> You must never report security related issues, vulnerabilities or bugs including sensitive information to the issue tracker, or elsewhere in public. Instead sensitive bugs must be sent by email to .
+
+We use GitHub issues to track bugs and errors. If you run into an issue with the project:
+
+- Open an [Issue](https://github.com/XplnHUB/cmx/issues/new). (Since we can't be sure at this point whether it is a bug or not, we ask you not to talk about a bug yet and not to label the issue.)
+- Explain the behavior you would expect and the actual behavior.
+- Please provide as much context as possible and describe the *reproduction steps* that someone else can follow to recreate the issue on their own. This usually includes your code. For good bug reports you should isolate the problem and create a reduced test case.
+- Provide the information you collected in the previous section.
+
+Once it's filed:
+
+- The project team will label the issue accordingly.
+- A team member will try to reproduce the issue with your provided steps. If there are no reproduction steps or no obvious way to reproduce the issue, the team will ask you for those steps and mark the issue as `needs-repro`. Bugs with the `needs-repro` tag will not be addressed until they are reproduced.
+- If the team is able to reproduce the issue, it will be marked `needs-fix`, as well as possibly other tags (such as `critical`), and the issue will be left to be [implemented by someone](#your-first-code-contribution).
+
+### Suggesting Enhancements
+
+This section guides you through submitting an enhancement suggestion for CMX, **including completely new features and minor improvements to existing functionality**. Following these guidelines will help maintainers and the community to understand your suggestion and find related suggestions.
+
+#### Before Submitting an Enhancement
+
+- Make sure that you are using the latest version.
+- Read the [documentation](https://github.com/XplnHUB/cmx#readme) carefully and find out if the functionality is already covered, maybe by an individual configuration.
+- Perform a [search](https://github.com/XplnHUB/cmx/issues) to see if the enhancement has already been suggested. If it has, add a comment to the existing issue instead of opening a new one.
+- Find out whether your idea fits with the scope and aims of the project. It's up to you to make a strong case to convince the project's developers of the merits of this feature. Keep in mind that we want features that will be useful to the majority of our users and not just a small subset. If you're just targeting a minority of users, consider writing an add-on/plugin library.
+
+#### How Do I Submit a Good Enhancement Suggestion?
+
+Enhancement suggestions are tracked as [GitHub issues](https://github.com/XplnHUB/cmx/issues).
+
+- Use a **clear and descriptive title** for the issue to identify the suggestion.
+- Provide a **step-by-step description of the suggested enhancement** in as many details as possible.
+- **Describe the current behavior** and **explain which behavior you expected to see instead** and why. At this point you can also tell which alternatives do not work for you.
+- You may want to include **screenshots and animated GIFs** which help you demonstrate the steps or point out the part which the suggestion is related to. You can use [this tool](https://www.cockos.com/licecap/) to record GIFs on macOS and Windows, and [this tool](https://github.com/colinkeenan/silentcast) or [this tool](https://github.com/GNOME/byzanz) on Linux.
+- **Explain why this enhancement would be useful** to most CMX users. You may also want to point out the other projects that solved it better and which could serve as inspiration.
+
+### Your First Code Contribution
+
+#### Prerequisites
+
+- Node.js >= 18.0.0
+- npm >= 9.0.0
+
+#### Setup
 
 1. Fork the repository
-2. Clone your fork:
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/holoway.git
-   cd holoway
-   ```
+2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/cmx.git`
+3. Install dependencies: `npm install`
+4. Create a branch: `git checkout -b my-feature`
 
-3. Add upstream remote:
-   ```bash
-   git remote add upstream https://github.com/XplnHUB/holoway.git
-   ```
+#### Development Workflow
 
-4. Install dependencies:
-   ```bash
-   npm install
-   ```
+1. Make your changes
+2. Run tests: `npm test`
+3. Run linter: `npm run lint`
+4. Commit changes: `git commit -m "feat: add new feature"`
+5. Push to your fork: `git push origin my-feature`
+6. Open a Pull Request
 
-5. Create a feature branch:
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
+#### Adding a New Parser
 
-## Development Workflow
+1. Create a new file in `src/parsers/` (e.g., `toml.js`)
+2. Implement the parser function
+3. Register it in `src/parsers/index.js`
+4. Add tests in `tests/parser-toml.test.js`
 
-### Running Tests
-```bash
-# Run all tests
-npm test -- --run
+#### Adding Middleware
 
-# Run tests in watch mode
-npm test
+1. Create middleware in `src/middleware/` or inline
+2. Ensure it follows the signature `(req, res, next) => {}`
+3. Add tests
 
-# Run specific test file
-npm test -- tests/routing.test.js
+### Improving The Documentation
 
-# Run benchmark tests
-npm run test:benchmark
-```
+Documentation is located in the `docs/` directory.
 
-### Code Quality
-```bash
-# Run linter
-npm run lint
+- `api.md`: API reference
+- `architecture.md`: Internal design
+- `security.md`: Security practices
+- `troubleshooting.md`: Common issues
 
-# Format code
-npm run format
+To update documentation:
 
-# Check formatting
-npm run format -- --check
-```
+1. Edit the markdown files
+2. Verify formatting
+3. Submit a PR
 
-### Development Server
-```bash
-# Start with auto-reload
-npm run dev
-```
-
-## Making Changes
-
-### Code Style
-- Use consistent indentation (2 spaces)
-- Use meaningful variable names
-- Add comments for complex logic
-- Follow existing code patterns
-- Use async/await instead of callbacks
+## Styleguides
 
 ### Commit Messages
-Follow conventional commits format:
-```
-type(scope): subject
 
-body
+We follow the [Conventional Commits](https://www.conventionalcommits.org/) specification.
 
-footer
-```
+- `feat`: A new feature
+- `fix`: A bug fix
+- `docs`: Documentation only changes
+- `style`: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+- `refactor`: A code change that neither fixes a bug nor adds a feature
+- `perf`: A code change that improves performance
+- `test`: Adding missing tests or correcting existing tests
+- `chore`: Changes to the build process or auxiliary tools and libraries such as documentation generation
 
-Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
+## Join The Project Team
 
-Examples:
-```
-feat(parser): add TOML parser support
-fix(routing): handle wildcard routes correctly
-docs(api): update response helpers documentation
-test(middleware): add async middleware tests
-```
-
-### Pull Request Process
-
-1. Update your branch with latest changes:
-   ```bash
-   git fetch upstream
-   git rebase upstream/main
-   ```
-
-2. Push to your fork:
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-
-3. Create a Pull Request on GitHub
-4. Fill out the PR template completely
-5. Ensure all CI/CD checks pass
-6. Request review from maintainers
-7. Address feedback and update PR
-8. Wait for approval and merge
-
-## Adding Features
-
-### Parser Implementation
-
-To add a new parser:
-
-1. Create file: `src/parsers/format.js`
-2. Implement parser function with error handling
-3. Add tests: `tests/parser-format.test.js`
-4. Update parser dispatcher: `src/parsers/index.js`
-5. Update TypeScript definitions: `index.d.ts`
-6. Document in: `docs/api.md`
-
-Example:
-```javascript
-// src/parsers/format.js
-function parseFormat(buffer, options = {}) {
-  try {
-    // Parse logic
-    return parsed;
-  } catch (err) {
-    const error = new Error(`Invalid Format: ${err.message}`);
-    error.statusCode = 400;
-    throw error;
-  }
-}
-
-export default parseFormat;
-```
-
-### Response Helper Implementation
-
-To add a response helper:
-
-1. Add method to: `src/response/enhance.js`
-2. Add tests to: `tests/response.test.js`
-3. Update TypeScript definitions: `index.d.ts`
-4. Document in: `docs/api.md`
-
-Example:
-```javascript
-// In src/response/enhance.js
-res.custom = function(data, options = {}) {
-  this.setHeader('Content-Type', options.type || 'application/json');
-  this.end(JSON.stringify(data));
-  return this;
-};
-```
-
-### Middleware Implementation
-
-To add middleware:
-
-1. Create file: `src/middleware/name.js`
-2. Export middleware function
-3. Add tests: `tests/middleware-name.test.js`
-4. Document usage in: `docs/api.md`
-
-Example:
-```javascript
-// src/middleware/custom.js
-export default function customMiddleware(options = {}) {
-  return (req, res, next) => {
-    // Middleware logic
-    next();
-  };
-}
-```
-
-## Testing Guidelines
-
-### Test Structure
-```javascript
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-
-describe('Feature Name', () => {
-  let setup;
-
-  beforeEach(() => {
-    // Setup before each test
-  });
-
-  afterEach(() => {
-    // Cleanup after each test
-  });
-
-  it('should do something', () => {
-    // Arrange
-    const input = 'test';
-    
-    // Act
-    const result = functionUnderTest(input);
-    
-    // Assert
-    expect(result).toBe('expected');
-  });
-});
-```
-
-### Coverage Requirements
-- Aim for >80% code coverage
-- Test happy paths and error cases
-- Test edge cases
-- Test integration between components
-
-## Documentation
-
-### Updating Documentation
-1. Update relevant `.md` files in `/docs`
-2. Update README.md if needed
-3. Update code comments
-4. Add examples for new features
-
-### Documentation Standards
-- Use clear, concise language
-- Include code examples
-- Explain why, not just what
-- Keep examples up-to-date
-- Link to related documentation
-
-## Bug Reports
-
-When reporting bugs:
-1. Use the bug report template
-2. Provide minimal reproduction
-3. Include error messages and logs
-4. Specify your environment
-5. Describe expected vs actual behavior
-
-## Feature Requests
-
-When requesting features:
-1. Use the feature request template
-2. Explain the use case
-3. Provide examples
-4. Discuss alternatives
-5. Consider backwards compatibility
-
-## Review Process
-
-### What Reviewers Look For
-- Code quality and style
-- Test coverage
-- Documentation completeness
-- Performance implications
-- Security considerations
-- Breaking changes
-
-### Addressing Feedback
-- Respond to all comments
-- Make requested changes
-- Push updates to PR
-- Re-request review
-- Don't force-push after review starts
-
-## Release Process
-
-### Version Numbers
-Follow semantic versioning: `MAJOR.MINOR.PATCH`
-
-- MAJOR: Breaking changes
-- MINOR: New features (backwards compatible)
-- PATCH: Bug fixes
-
-### Release Checklist
-- [ ] All tests passing
-- [ ] Documentation updated
-- [ ] Changelog updated
-- [ ] Version bumped in package.json
-- [ ] Git tag created
-- [ ] Published to npm
-
-## Resources
-
-- [GitHub Actions Documentation](https://docs.github.com/en/actions)
-- [Vitest Documentation](https://vitest.dev/)
-- [Node.js Best Practices](https://nodejs.org/en/docs/guides/)
-- [Semantic Versioning](https://semver.org/)
-- [Conventional Commits](https://www.conventionalcommits.org/)
-
-## Questions?
-
-- Open an issue for questions
-- Check existing documentation
-- Review past issues and PRs
-- Ask in discussions
-
-## Thank You!
-
-Thank you for contributing to Holoway! Your efforts help make this project better for everyone.
+If you are interested in becoming a maintainer, please reach out to us via email or open an issue expressing your interest. We are always looking for help!
 
 ---
 
-**Last Updated**: November 14, 2025
+**Happy Coding!** 🚀
+: November 14, 2025
