@@ -1,6 +1,5 @@
-<img# CMX
+<img width="1264" height="372" alt="Screenshot 2025-12-01 at 22 52 31" src="https://github.com/user-attachments/assets/707a51a4-e456-49e6-8f3f-57da670eef7f" />
 
-![CMX Banner](https://via.placeholder.com/1200x300?text=CMX+Framework)
 
 > A modern, lightweight, and multi-format backend framework for Node.js.
 
