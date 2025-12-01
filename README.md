@@ -13,13 +13,13 @@ Whether you're building a REST API, a data processing service, or an IoT backend
 
 ## Features
 
-- 🚀 **Express-style Routing**: Familiar API for defining routes and middleware.
-- 📦 **Multi-format Parsing**: Automatic parsing for JSON, CSV, XML, YAML, Form-Data, and Binary.
-- 🛠️ **Middleware System**: Robust middleware support for logging, authentication, and more.
-- ⚡ **Lightweight**: Zero external dependencies for core routing and middleware.
-- 🔒 **Security**: Built-in security features like XXE protection and file upload limits.
-- 📝 **Enhanced Responses**: Helper methods for sending responses in various formats (`res.json`, `res.csv`, `res.xml`, etc.).
-- 📄 **Auto-Documentation**: Automatically generate API documentation from your routes.
+- **Express-style Routing**: Familiar API for defining routes and middleware.
+- **Multi-format Parsing**: Automatic parsing for JSON, CSV, XML, YAML, Form-Data, and Binary.
+- **Middleware System**: Robust middleware support for logging, authentication, and more.
+- **Lightweight**: Zero external dependencies for core routing and middleware.
+- **Security**: Built-in security features like XXE protection and file upload limits.
+- **Enhanced Responses**: Helper methods for sending responses in various formats (`res.json`, `res.csv`, `res.xml`, etc.).
+- **Auto-Documentation**: Automatically generate API documentation from your routes.
 
 ## Installation
 
