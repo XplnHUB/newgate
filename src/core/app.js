@@ -1,5 +1,6 @@
 import Router from './router.js';
 import createServer from './server.js';
+import { generateMarkdown } from '../utils/doc-generator.js';
 
 class App {
   constructor() {
@@ -81,7 +82,7 @@ class App {
   // Graceful shutdown
   async shutdown() {
     console.log('Shutting down gracefully...');
-    
+
     // Run all shutdown hooks
     for (const hook of this.shutdownHooks) {
       try {
@@ -111,7 +112,7 @@ class App {
 
   listen(port, callback) {
     this.server = createServer(this);
-    
+
     // Handle process termination
     const shutdownSignals = ['SIGINT', 'SIGTERM'];
     const onSignal = async (signal) => {
@@ -146,6 +147,11 @@ class App {
     });
 
     return this.server.listen(port, callback);
+  }
+
+  // Generate API documentation
+  generateDocs(options = {}) {
+    return generateMarkdown(this.router.routes, options);
   }
 }
 

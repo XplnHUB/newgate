@@ -44,7 +44,7 @@ arx is ideal for building APIs, file processing services, IoT backends, and any 
 
 ```bash
 npm install arx
-````
+```
 
 ---
 
